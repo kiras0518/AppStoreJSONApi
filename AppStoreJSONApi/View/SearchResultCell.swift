@@ -78,7 +78,6 @@ class SearchResultCell: UICollectionViewCell {
     
     func createScreenshotImageView () -> UIImageView {
         let iv = UIImageView()
-        iv.backgroundColor = .orange
         iv.layer.cornerRadius = 8
         iv.clipsToBounds = true
         iv.layer.borderWidth = 0.5

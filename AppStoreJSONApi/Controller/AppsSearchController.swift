@@ -9,9 +9,19 @@
 import UIKit
 import SDWebImage
 
-class AppsSearchController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class AppsSearchController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
     
     fileprivate let cellId = "id1234"
+    
+    fileprivate let searchController = UISearchController(searchResultsController: nil)
+    
+    fileprivate let enterSearchLabel: UILabel = {
+       let lb = UILabel()
+        lb.text = " Please enter serach trem"
+        lb.textAlignment = .center
+        lb.font = UIFont.boldSystemFont(ofSize: 20)
+        return lb
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,14 +30,48 @@ class AppsSearchController: UICollectionViewController, UICollectionViewDelegate
         
         collectionView.register(SearchResultCell.self, forCellWithReuseIdentifier: cellId)
         
+        view.addSubview(enterSearchLabel)
+        enterSearchLabel.fillSuperview(padding: .init(top: 100, left: 50, bottom: 0, right: 50))
+        
+        setupSerachBar()
+        
         fetchiTunesApps()
+        
+    }
+    
+    fileprivate func setupSerachBar() {
+        definesPresentationContext = true
+        navigationItem.searchController = self.searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchBar.delegate = self
+        
+    }
+    var timer: Timer?
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print(searchText)
+        
+        timer?.invalidate()
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in
+            Service.shared.fetchApps(searchTerm: searchText) { (res, error) in
+                self.appRusults = res
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+        })
         
     }
     
     fileprivate var appRusults = [Result]()
     
+    
+    
     fileprivate func fetchiTunesApps() {
-        Service.shared.fetchApps  { (results, err)  in
+        
+        Service.shared.fetchApps(searchTerm: "Twitter")  { (results, err)  in
             
             if let err = err {
                 print("Failed to Feach", err)
@@ -47,6 +91,7 @@ class AppsSearchController: UICollectionViewController, UICollectionViewDelegate
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        enterSearchLabel.isHidden = appRusults.count != 0
         return appRusults.count
     }
     
