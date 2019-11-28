@@ -1,0 +1,6 @@
+framework module Pods_AppStoreJSONApiTests {
+  umbrella header "Pods-AppStoreJSONApiTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
