@@ -13,6 +13,7 @@ class AppshorizontalController: BaseListControlle, UICollectionViewDelegateFlowL
     let cellId = "cellId"
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
         collectionView.backgroundColor = .white

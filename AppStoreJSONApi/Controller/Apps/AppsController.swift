@@ -21,7 +21,22 @@ class AppsController: BaseListControlle, UICollectionViewDelegateFlowLayout {
         collectionView.register(AppsGroupCell.self, forCellWithReuseIdentifier: cellId)
   
         collectionView.register(AppsPageHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+        
+        fetchData()
     }
+    
+    fileprivate func fetchData() {
+        print("Fetching new JSON Data")
+        Service.shared.fetchGames { (data, error) in
+            if let error = error {
+                print("Failed to Feach", error)
+                return
+            }
+            print(data?.feed.title)
+        }
+    }
+    
+    
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath)

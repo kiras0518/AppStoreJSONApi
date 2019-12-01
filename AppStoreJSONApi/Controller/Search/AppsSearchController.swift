@@ -67,8 +67,6 @@ class AppsSearchController: UICollectionViewController, UICollectionViewDelegate
     
     fileprivate var appRusults = [Result]()
     
-    
-    
     fileprivate func fetchiTunesApps() {
         
         Service.shared.fetchApps(searchTerm: "Twitter")  { (results, err)  in
