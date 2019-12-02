@@ -19,24 +19,48 @@ class AppsController: BaseListControlle, UICollectionViewDelegateFlowLayout {
         collectionView.backgroundColor = .white
         
         collectionView.register(AppsGroupCell.self, forCellWithReuseIdentifier: cellId)
-  
+        
         collectionView.register(AppsPageHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         
         fetchData()
     }
     
+    //var editorsChoiceGames: AppGroup?
+    
+    var groups = [AppGroup]()
+    
     fileprivate func fetchData() {
         print("Fetching new JSON Data")
         Service.shared.fetchGames { (data, error) in
-            if let error = error {
-                print("Failed to Feach", error)
-                return
+            
+            if let group = data {
+                self.groups.append(group)
             }
-            print(data?.feed.title)
+            
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+            
+        }
+        
+        Service.shared.fetchTopGorssing(completion: { (appGroup, err) in
+            if let group = appGroup {
+                self.groups.append(group)
+            }
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        })
+        
+        Service.shared.fetchAppGroup(urlString: "https://rss.itunes.apple.com/api/v1/us/ios-apps/top-free/all/50/explicit.json") { (appGroup, err) in
+            if let group = appGroup {
+                self.groups.append(group)
+            }
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
         }
     }
-    
-    
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath)
@@ -45,16 +69,22 @@ class AppsController: BaseListControlle, UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return .init(width: view.frame.width, height: 300)
+        return .init(width: view.frame.width, height: 200)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return groups.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AppsGroupCell
+        
+        let appGroup = groups[indexPath.item]
+        
+        cell.titleLabel.text = appGroup.feed.title
+        cell.horizontalController.appGroup = appGroup
+        cell.horizontalController.collectionView.reloadData()
         
         return cell
         
