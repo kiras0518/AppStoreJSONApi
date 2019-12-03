@@ -31,6 +31,7 @@
 		6E74D2B8238A6FDA009D79BE /* AppsSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E74D2B7238A6FDA009D79BE /* AppsSearchController.swift */; };
 		6E74D2BA238A7A49009D79BE /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E74D2B9238A7A49009D79BE /* SearchResultCell.swift */; };
 		6E74D2BE238AD5C8009D79BE /* VerticalStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E74D2BD238AD5C8009D79BE /* VerticalStackView.swift */; };
+		6E9366562396C2E10021E153 /* SocialApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9366552396C2E10021E153 /* SocialApp.swift */; };
 		7FDC63E6A138F9169959A904 /* Pods_AppStoreJSONApiTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9271D02D0A5FF9BE9DA81A1F /* Pods_AppStoreJSONApiTests.framework */; };
 		AFA2138CC68D0F61757FF3A6 /* Pods_AppStoreJSONApi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0830F421F69564CAF300779 /* Pods_AppStoreJSONApi.framework */; };
 		B96612B42C18E038D275ACEA /* Pods_AppStoreJSONApi_AppStoreJSONApiUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC2F8759E5CE8A14D2E07653 /* Pods_AppStoreJSONApi_AppStoreJSONApiUITests.framework */; };
@@ -86,6 +87,7 @@
 		6E74D2B7238A6FDA009D79BE /* AppsSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppsSearchController.swift; sourceTree = "<group>"; };
 		6E74D2B9238A7A49009D79BE /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
 		6E74D2BD238AD5C8009D79BE /* VerticalStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalStackView.swift; sourceTree = "<group>"; };
+		6E9366552396C2E10021E153 /* SocialApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialApp.swift; sourceTree = "<group>"; };
 		9271D02D0A5FF9BE9DA81A1F /* Pods_AppStoreJSONApiTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AppStoreJSONApiTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0830F421F69564CAF300779 /* Pods_AppStoreJSONApi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AppStoreJSONApi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7C9E1D1A0FD59766F85E73D /* Pods-AppStoreJSONApi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AppStoreJSONApi.debug.xcconfig"; path = "Target Support Files/Pods-AppStoreJSONApi/Pods-AppStoreJSONApi.debug.xcconfig"; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 			children = (
 				6E469D75238D8EF500EEAD8F /* SearchResult.swift */,
 				6E58CD82239426BC0013D470 /* AppGroup.swift */,
+				6E9366552396C2E10021E153 /* SocialApp.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -513,6 +516,7 @@
 			files = (
 				6E0E2A37238EDBBB00CDBF74 /* UIView+Layout.swift in Sources */,
 				6E74D28A238A67B3009D79BE /* ViewController.swift in Sources */,
+				6E9366562396C2E10021E153 /* SocialApp.swift in Sources */,
 				6E74D288238A67B3009D79BE /* AppDelegate.swift in Sources */,
 				6E58CD83239426BC0013D470 /* AppGroup.swift in Sources */,
 				6E63DABC2392B6CE00671060 /* AppsController.swift in Sources */,

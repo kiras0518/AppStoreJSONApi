@@ -13,7 +13,7 @@ class AppshorizontalController: BaseListControlle, UICollectionViewDelegateFlowL
     let cellId = "cellId"
     
     var appGroup: AppGroup?
-    
+   
     override func viewDidLoad() {
         
         super.viewDidLoad()

@@ -54,8 +54,6 @@ class Service {
     //helper
     func fetchAppGroup(urlString: String, completion: @escaping (AppGroup?, Error?) -> Void) {
         
-        //guard let url = URL(string: "https://rss.itunes.apple.com/api/v1/us/apple-music/coming-soon/all/50/explicit.json") else { return }
-        
         guard let url = URL(string: urlString) else { return }
         
         URLSession.shared.dataTask(with: url) { (data, res, error) in
@@ -70,6 +68,33 @@ class Service {
                 let appGroup = try JSONDecoder().decode(AppGroup.self, from: data!)
                 
                 completion(appGroup, nil)
+            } catch let jsonError {
+                completion(nil, error)
+                print("Failed to decode json:", jsonError)
+            }
+            
+            }.resume()
+        
+    }
+    
+    func fetchSocialApps(completion: @escaping ([SocialApp]?, Error?) -> Void) {
+        
+        let urlString = "https://api.letsbuildthatapp.com/appstore/social"
+        
+        guard let url = URL(string: urlString) else { return }
+        
+        URLSession.shared.dataTask(with: url) { (data, res, error) in
+            
+            if let error = error {
+                print("Failed to fetch apps:", error)
+                completion(nil, error)
+                return
+            }
+            
+            do {
+                let object = try JSONDecoder().decode([SocialApp].self, from: data!)
+                
+                completion(object, nil)
             } catch let jsonError {
                 completion(nil, error)
                 print("Failed to decode json:", jsonError)

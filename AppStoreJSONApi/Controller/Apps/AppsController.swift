@@ -13,6 +13,14 @@ class AppsController: BaseListControlle, UICollectionViewDelegateFlowLayout {
     let cellId = "id"
     let headerId = "headerId"
     
+    let activityIndicatorView: UIActivityIndicatorView = {
+       let aiv = UIActivityIndicatorView(style: .whiteLarge)
+        aiv.color = .black
+        aiv.startAnimating()
+        aiv.hidesWhenStopped = true
+        return aiv
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -22,49 +30,97 @@ class AppsController: BaseListControlle, UICollectionViewDelegateFlowLayout {
         
         collectionView.register(AppsPageHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.fillSuperview()
+        
         fetchData()
     }
     
     //var editorsChoiceGames: AppGroup?
     
     var groups = [AppGroup]()
+    var socialApps = [SocialApp]()
     
     fileprivate func fetchData() {
         print("Fetching new JSON Data")
+        
+        var group1: AppGroup?
+        var group2: AppGroup?
+        var group3: AppGroup?
+        
+        let dispatchGroup = DispatchGroup()
+        
+        dispatchGroup.enter()
         Service.shared.fetchGames { (data, error) in
+            print("Done with Game")
+            dispatchGroup.leave()
+            group1 = data
+//            if let group = data {
+//                self.groups.append(group)
+//            }
+//            DispatchQueue.main.async {
+//                self.collectionView.reloadData()
+//            }
+        }
+        
+        dispatchGroup.enter()
+        Service.shared.fetchTopGorssing(completion: { (appGroup, err) in
+            print("Done with Gorssing")
+            dispatchGroup.leave()
+            group2 = appGroup
+//            if let group = appGroup {
+//                self.groups.append(group)
+//            }
+//            DispatchQueue.main.async {
+//                self.collectionView.reloadData()
+//            }
+        })
+        
+        dispatchGroup.enter()
+        Service.shared.fetchAppGroup(urlString: "https://rss.itunes.apple.com/api/v1/us/ios-apps/top-free/all/25/explicit.json") { (appGroup, err) in
+            print("Done with Free")
+            dispatchGroup.leave()
+            group3 = appGroup
+//            if let group = appGroup {
+//                self.groups.append(group)
+//            }
+//            DispatchQueue.main.async {
+//                self.collectionView.reloadData()
+//            }
+        }
+         dispatchGroup.enter()
+        Service.shared.fetchSocialApps { (apps, err) in
+            print("Done with Social")
+            dispatchGroup.leave()
+            self.socialApps = apps ?? []
             
-            if let group = data {
-                self.groups.append(group)
-            }
-            
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
             
         }
         
-        Service.shared.fetchTopGorssing(completion: { (appGroup, err) in
-            if let group = appGroup {
+        // completd
+        dispatchGroup.notify(queue: .main) {
+            print("completd your task....")
+            self.activityIndicatorView.stopAnimating()
+            if let group = group1 {
                 self.groups.append(group)
             }
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        })
-        
-        Service.shared.fetchAppGroup(urlString: "https://rss.itunes.apple.com/api/v1/us/ios-apps/top-free/all/50/explicit.json") { (appGroup, err) in
-            if let group = appGroup {
+            
+            if let group = group2 {
                 self.groups.append(group)
             }
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
+            
+            if let group = group3 {
+                self.groups.append(group)
             }
+            
+            self.collectionView.reloadData()
         }
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath)
-        
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! AppsPageHeader
+        header.appHeaderHorizontalController.socialApps = self.socialApps
+        header.appHeaderHorizontalController.collectionView.reloadData()
         return header
     }
     
