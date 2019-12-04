@@ -12,31 +12,15 @@ class Service {
     
     static let shared = Service()
     
-    func fetchApps(searchTerm: String, completion: @escaping ([Result], Error?) -> ()) {
-        let urlString = "https://itunes.apple.com/search?term=\(searchTerm)&entity=software"
-        guard let url = URL(string: urlString) else { return }
+    func fetchApps(searchTerm: String, completion: @escaping (SearchResult?, Error?) -> ()) {
         
-        URLSession.shared.dataTask(with: url) { (data, res, error) in
-            if let error = error {
-                print("Failed to fetch apps:", error)
-                completion([], nil)
-                return
-            }
-            guard let data = data else { return }
-            
-            do {
-                let searchResult = try JSONDecoder().decode(SearchResult.self, from: data)
-                //print(searchResult)
-                completion(searchResult.results, nil)
-            } catch let josnError{
-                print("Failed to decode json:", josnError)
-                completion([], nil)
-            }
-            
-            }.resume() // fires off the request
+        let urlString = "https://itunes.apple.com/search?term=\(searchTerm)&entity=software"
+        
+        fetchGenericJSONData(urlString: urlString, completion: completion)
+        
     }
     
-    func fetchTopGorssing(completion: @escaping (AppGroup?, Error?) -> ()) {
+    func fetchTopGrossing(completion: @escaping (AppGroup?, Error?) -> ()) {
         
         let url = "https://rss.itunes.apple.com/api/v1/us/ios-apps/top-grossing/all/50/explicit.json"
         
@@ -54,26 +38,7 @@ class Service {
     //helper
     func fetchAppGroup(urlString: String, completion: @escaping (AppGroup?, Error?) -> Void) {
         
-        guard let url = URL(string: urlString) else { return }
-        
-        URLSession.shared.dataTask(with: url) { (data, res, error) in
-            
-            if let error = error {
-                print("Failed to fetch apps:", error)
-                completion(nil, error)
-                return
-            }
-            
-            do {
-                let appGroup = try JSONDecoder().decode(AppGroup.self, from: data!)
-                
-                completion(appGroup, nil)
-            } catch let jsonError {
-                completion(nil, error)
-                print("Failed to decode json:", jsonError)
-            }
-            
-            }.resume()
+        fetchGenericJSONData(urlString: urlString, completion: completion)
         
     }
     
@@ -81,6 +46,15 @@ class Service {
         
         let urlString = "https://api.letsbuildthatapp.com/appstore/social"
         
+        fetchGenericJSONData(urlString: urlString, completion: completion)
+        
+    }
+    
+    // declare my generic json function here
+    func fetchGenericJSONData<T: Decodable>(urlString: String, completion: @escaping (T?, Error?)-> ()) {
+        
+        print("T is Tyep", T.self)
+        
         guard let url = URL(string: urlString) else { return }
         
         URLSession.shared.dataTask(with: url) { (data, res, error) in
@@ -92,7 +66,7 @@ class Service {
             }
             
             do {
-                let object = try JSONDecoder().decode([SocialApp].self, from: data!)
+                let object = try JSONDecoder().decode(T.self, from: data!)
                 
                 completion(object, nil)
             } catch let jsonError {
@@ -105,3 +79,20 @@ class Service {
     }
     
 }
+
+//class Stack<T: Decodable> {
+//    var items = [T]()
+//    func push(item: T) { items.append(item) }
+//    func pop() -> T? { return items.last }
+//}
+//
+//func dummyFunc() {
+//
+//    let stackOfStrings = Stack<String>()
+//    stackOfStrings.push(item: "This is to ba string")
+//
+//    let stackOfInts = Stack<Int>()
+//    stackOfInts.push(item: 1)
+//
+//}
+//

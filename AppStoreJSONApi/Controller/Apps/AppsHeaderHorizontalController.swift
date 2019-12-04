@@ -40,8 +40,8 @@ class AppsHeaderHorizontalController: BaseListControlle, UICollectionViewDelegat
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AppsHeaderCell
-        cell.titleLabel.text = socialApps[indexPath.item].name
-        cell.company.text = socialApps[indexPath.item].tagline
+        cell.titleLabel.text = socialApps[indexPath.item].tagline
+        cell.company.text = socialApps[indexPath.item].name
         cell.imageView.sd_setImage(with: URL(string: socialApps[indexPath.item].imageUrl))
         
         return cell

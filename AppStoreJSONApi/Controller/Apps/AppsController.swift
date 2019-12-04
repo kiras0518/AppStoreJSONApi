@@ -64,7 +64,7 @@ class AppsController: BaseListControlle, UICollectionViewDelegateFlowLayout {
         }
         
         dispatchGroup.enter()
-        Service.shared.fetchTopGorssing(completion: { (appGroup, err) in
+        Service.shared.fetchTopGrossing(completion: { (appGroup, err) in
             print("Done with Gorssing")
             dispatchGroup.leave()
             group2 = appGroup

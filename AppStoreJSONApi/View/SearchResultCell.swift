@@ -100,26 +100,11 @@ class SearchResultCell: UICollectionViewCell {
         screenshotsStackView.spacing = 12
         screenshotsStackView.distribution = .fillEqually
         
-        //let overallStackView = UIStackView(arrangedSubviews: [infoTopStackView, screenshotsStackView])
-        //overallStackView.axis = .vertical
-        //overallStackView.spacing = 16
-        
         let overallStackView = VerticalStackView(arrangedSubview: [infoTopStackView, screenshotsStackView], spacing: 16)
         
         addSubview(overallStackView)
         overallStackView.fillSuperview(padding: .init(top: 16, left: 16, bottom: 16, right: 16))
-        
-//
-//        addSubview(infoTopStackView)
-//        infoTopStackView.fillSuperview(padding: .init(top: 16, left: 16, bottom: 16, right: 16))
-        
-        
-//        stackView.translatesAutoresizingMaskIntoConstraints = false
-//
-//        stackView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-//        stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
-//        stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-//        stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16).isActive = true
+
     }
     
     required init?(coder aDecoder: NSCoder) {

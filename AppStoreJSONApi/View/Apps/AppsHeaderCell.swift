@@ -11,7 +11,7 @@ import UIKit
 class AppsHeaderCell: UICollectionViewCell {
     
     let company = UILabel(text: "FackBook", font: .boldSystemFont(ofSize: 12))
-    let titleLabel = UILabel(text: "Keeping up with friends", font: .systemFont(ofSize: 30))
+    let titleLabel = UILabel(text: "Keeping up with friends", font: .systemFont(ofSize: 24))
     let imageView = UIImageView(cornerRadius: 8)
     
     override init(frame: CGRect) {
