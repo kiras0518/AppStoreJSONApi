@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AppsController: BaseListControlle, UICollectionViewDelegateFlowLayout {
+class AppsController: BaseListController, UICollectionViewDelegateFlowLayout {
     
     let cellId = "id"
     let headerId = "headerId"
@@ -55,12 +55,6 @@ class AppsController: BaseListControlle, UICollectionViewDelegateFlowLayout {
             print("Done with Game")
             dispatchGroup.leave()
             group1 = data
-//            if let group = data {
-//                self.groups.append(group)
-//            }
-//            DispatchQueue.main.async {
-//                self.collectionView.reloadData()
-//            }
         }
         
         dispatchGroup.enter()
@@ -68,12 +62,6 @@ class AppsController: BaseListControlle, UICollectionViewDelegateFlowLayout {
             print("Done with Gorssing")
             dispatchGroup.leave()
             group2 = appGroup
-//            if let group = appGroup {
-//                self.groups.append(group)
-//            }
-//            DispatchQueue.main.async {
-//                self.collectionView.reloadData()
-//            }
         })
         
         dispatchGroup.enter()
@@ -117,6 +105,12 @@ class AppsController: BaseListControlle, UICollectionViewDelegateFlowLayout {
         }
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let redController = UIViewController()
+        redController.view.backgroundColor = .red
+        navigationController?.pushViewController(redController, animated: true)
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! AppsPageHeader
         header.appHeaderHorizontalController.socialApps = self.socialApps
@@ -125,7 +119,7 @@ class AppsController: BaseListControlle, UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return .init(width: view.frame.width, height: 200)
+        return .init(width: view.frame.width, height: 300)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -141,6 +135,16 @@ class AppsController: BaseListControlle, UICollectionViewDelegateFlowLayout {
         cell.titleLabel.text = appGroup.feed.title
         cell.horizontalController.appGroup = appGroup
         cell.horizontalController.collectionView.reloadData()
+        cell.horizontalController.didSelectHander = { [weak self] feedResult in
+            
+            let vc = AppDetailController()
+            
+            vc.appId = feedResult.id
+            
+            vc.navigationItem.title = feedResult.name
+            
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
         
         return cell
         
@@ -154,6 +158,5 @@ class AppsController: BaseListControlle, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return .init(top: 16, left: 0, bottom: 0, right: 0)
     }
-    
     
 }

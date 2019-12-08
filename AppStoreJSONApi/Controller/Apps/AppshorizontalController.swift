@@ -8,22 +8,26 @@
 
 import UIKit
 
-class AppshorizontalController: BaseListControlle, UICollectionViewDelegateFlowLayout {
+class AppshorizontalController: HorizontalSnappingController, UICollectionViewDelegateFlowLayout {
     
     let cellId = "cellId"
     
     var appGroup: AppGroup?
-   
+    
+    var didSelectHander:((FeedResult) -> ())?
+    
     override func viewDidLoad() {
-        
         super.viewDidLoad()
-        
         collectionView.backgroundColor = .white
         
         collectionView.register(AppRowCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.contentInset = .init(top: 0, left: 16, bottom: 0, right: 16)
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.scrollDirection = .horizontal
+        if let app = appGroup?.feed.results[indexPath.row] {
+              didSelectHander?(app)
         }
     }
     
@@ -32,13 +36,11 @@ class AppshorizontalController: BaseListControlle, UICollectionViewDelegateFlowL
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AppRowCell
         let app = appGroup?.feed.results[indexPath.item]
         cell.nameLable.text = app?.name
         cell.companyLable.text = app?.artistName
         cell.imageView.sd_setImage(with: URL(string: app?.artworkUrl100 ?? ""))
-        
         return cell
     }
     
@@ -46,9 +48,7 @@ class AppshorizontalController: BaseListControlle, UICollectionViewDelegateFlowL
     let lineSpacing: CGFloat = 10
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
         let height = (view.frame.height - 2 * topBottomPadding - 2 * lineSpacing) / 3
-        
         return .init(width: view.frame.width - 48, height: height)
     }
     
@@ -57,6 +57,7 @@ class AppshorizontalController: BaseListControlle, UICollectionViewDelegateFlowL
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return .init(top: topBottomPadding, left: 16, bottom: topBottomPadding, right: 16)
+        return .init(top: topBottomPadding, left: 0, bottom: topBottomPadding, right: 0)
     }
+    
 }

@@ -109,5 +109,4 @@ class AppsSearchController: UICollectionViewController, UICollectionViewDelegate
         fatalError("init(coder:) has not been implemented")
     }
     
-    
 }

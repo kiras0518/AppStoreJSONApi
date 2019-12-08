@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AppsHeaderHorizontalController: BaseListControlle, UICollectionViewDelegateFlowLayout {
+class AppsHeaderHorizontalController: HorizontalSnappingController, UICollectionViewDelegateFlowLayout {
     
     let cellId = "cellId"
     
@@ -20,15 +20,16 @@ class AppsHeaderHorizontalController: BaseListControlle, UICollectionViewDelegat
         
         collectionView.register(AppsHeaderCell.self, forCellWithReuseIdentifier: cellId)
         
+        collectionView.contentInset = .init(top: 0, left: 16, bottom: 0, right: 16)
         // 設置 Cell 滑動方向
-        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.scrollDirection = .horizontal
-        }
+//        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
+//            layout.scrollDirection = .horizontal
+//        }
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return .init(top: 0, left: 16, bottom: 0, right: 16)
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+//        return .init(top: 0, left: 16, bottom: 0, right: 16)
+//    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return .init(width: view.frame.width - 48, height: view.frame.height)
@@ -40,8 +41,9 @@ class AppsHeaderHorizontalController: BaseListControlle, UICollectionViewDelegat
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AppsHeaderCell
+        
         cell.titleLabel.text = socialApps[indexPath.item].tagline
-        cell.company.text = socialApps[indexPath.item].name
+        cell.companyLabel.text = socialApps[indexPath.item].name
         cell.imageView.sd_setImage(with: URL(string: socialApps[indexPath.item].imageUrl))
         
         return cell

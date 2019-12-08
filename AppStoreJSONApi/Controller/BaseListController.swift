@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BaseListControlle: UICollectionViewController {
+class BaseListController: UICollectionViewController {
     
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
