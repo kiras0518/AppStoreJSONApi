@@ -32,7 +32,7 @@ class AppDetailCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .lightGray
+        backgroundColor = .white
         
         appIconImageView.backgroundColor = .red
         appIconImageView.constrainWidth(constant: 140)
