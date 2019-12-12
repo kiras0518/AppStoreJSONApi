@@ -12,7 +12,7 @@ class PreviewCell: UICollectionViewCell {
     
     let horizontalController = PreviewShotsController()
     
-    let previewLabel = UILabel(text: "Preview", font: .boldSystemFont(ofSize: 20), numberOfLines: 1)
+    let previewLabel = UILabel(text: "Preview", font: .boldSystemFont(ofSize: 20))
     
     override init(frame: CGRect) {
         super.init(frame: frame)

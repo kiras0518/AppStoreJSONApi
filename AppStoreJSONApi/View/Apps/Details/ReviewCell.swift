@@ -10,8 +10,6 @@ import UIKit
 
 class ReviewCell: UICollectionViewCell {
     
-    let reviewsController = ReviewsController()
-    
     let titleLabel = UILabel(text: "Reviews Title", font: .boldSystemFont(ofSize: 16), numberOfLines: 1)
     
     let authorLabel = UILabel(text: "Author", font: .systemFont(ofSize: 16))
@@ -23,16 +21,25 @@ class ReviewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .yellow
+        backgroundColor = #colorLiteral(red: 0.9423103929, green: 0.9410001636, blue: 0.9745038152, alpha: 1)
         
         layer.cornerRadius = 16
         
         clipsToBounds = true
 
-        let stackView = VerticalStackView(arrangedSubview: [ UIStackView(arrangedSubviews: [titleLabel, UIView(), authorLabel]),
-                                                             starsLabel, bodyLabel], spacing: 12)
+        let stackView = VerticalStackView(arrangedSubview: [
+            UIStackView(arrangedSubviews: [
+                titleLabel, authorLabel
+                ], customSpacing: 8),
+            starsLabel,
+            bodyLabel
+            ], spacing: 12)
+        
+        titleLabel.setContentCompressionResistancePriority(.init(0), for: .horizontal)
+        authorLabel.textAlignment = .right
+        
         addSubview(stackView)
-        stackView.fillSuperview(padding: .init(top: 12, left: 12, bottom: 12, right: 12))
+        stackView.fillSuperview(padding: .init(top: 20, left: 20, bottom: 20, right: 20))
     }
     
     required init?(coder aDecoder: NSCoder) {

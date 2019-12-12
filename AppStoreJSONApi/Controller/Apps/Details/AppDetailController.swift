@@ -12,21 +12,39 @@ class AppDetailController: BaseListController, UICollectionViewDelegateFlowLayou
     
     let detailCellId = "detailCellId"
     let previewCellId = "previewCellId"
-    let reviewRowCellId = "reviewRowCellId"
+    let reviewCellId = "reviewCellId"
    
     var app: Result?
+    var reviews: Reviews?
     
     var appId: String? {
         didSet {
             print("Here is my appID", appId)
             let url = "https://itunes.apple.com/lookup?id=\(appId ?? "")"
             Service.shared.fetchGenericJSONData(urlString: url) { (result: SearchResult?, err) in
-                print(result?.results.first?.releaseNotes)
+                //print(result?.results.first?.releaseNotes)
                 let app = result?.results.first
                 self.app = app
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                 }
+            }
+            
+            let reviewsUrl = "https://itunes.apple.com/rss/customerreviews/page=1/id=\(appId ?? "")/sortby=mostrecent/json?l=en&cc=us"
+            Service.shared.fetchGenericJSONData(urlString: reviewsUrl) { (reviews: Reviews?, err) in
+                if let err = err {
+                    print("Failed to decode revies:", err)
+                    return
+                }
+                
+                self.reviews = reviews
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+                
+//                reviews?.feed.entry.forEach({ (entry) in
+//                    print(entry.title, entry.content)
+//                })
             }
         }
     }
@@ -36,7 +54,8 @@ class AppDetailController: BaseListController, UICollectionViewDelegateFlowLayou
         
         collectionView.register(AppDetailCell.self, forCellWithReuseIdentifier: detailCellId)
         collectionView.register(PreviewCell.self, forCellWithReuseIdentifier: previewCellId)
-        collectionView.register(ReviewRowCell.self, forCellWithReuseIdentifier: reviewRowCellId)
+        collectionView.register(ReviewRowCell.self, forCellWithReuseIdentifier: reviewCellId)
+        
         navigationItem.largeTitleDisplayMode = .never
     }
     
@@ -52,10 +71,11 @@ class AppDetailController: BaseListController, UICollectionViewDelegateFlowLayou
             return cell
         } else if indexPath.row == 1 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: previewCellId, for: indexPath) as! PreviewCell
-            cell.horizontalController.app = app
+            cell.horizontalController.app = self.app
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewRowCellId, for: indexPath) as! ReviewRowCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewCellId, for: indexPath) as! ReviewRowCell
+            cell.reviewsController.reviews = self.reviews
             return cell
         }
         
