@@ -56,6 +56,12 @@ class AppsSearchController: UICollectionViewController, UICollectionViewDelegate
         
         timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in
             Service.shared.fetchApps(searchTerm: searchText) { (res, error) in
+                
+                if let err = error {
+                    print("Failed to fetch apps:", err)
+                    return
+                }
+                
                 self.appRusults = res?.results ?? []
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
@@ -82,6 +88,14 @@ class AppsSearchController: UICollectionViewController, UICollectionViewDelegate
                 self.collectionView.reloadData()
             }
         }
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let appId = String(appRusults[indexPath.row].trackId)
+        
+        let appDetailCV = AppDetailController(appId: appId)
+        
+        navigationController?.pushViewController(appDetailCV, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

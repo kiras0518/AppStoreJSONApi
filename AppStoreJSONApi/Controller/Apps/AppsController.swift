@@ -137,9 +137,7 @@ class AppsController: BaseListController, UICollectionViewDelegateFlowLayout {
         cell.horizontalController.collectionView.reloadData()
         cell.horizontalController.didSelectHander = { [weak self] feedResult in
             
-            let vc = AppDetailController()
-            
-            vc.appId = feedResult.id
+            let vc = AppDetailController(appId: feedResult.id)
             
             vc.navigationItem.title = feedResult.name
             
