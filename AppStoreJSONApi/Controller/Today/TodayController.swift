@@ -44,13 +44,22 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         return .init(top: 32, left: 0, bottom: 32, right: 0)
     }
     
+    var appFullScreenController: UIViewController?
+    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("Aniimate!!!!")
-        let redView = UIView()
+        
+        let appFullscreenCV = AppFullscreenController()
+        appFullscreenCV.view.backgroundColor = .yellow
+        
+        let redView = appFullscreenCV.view!
         redView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleRemoveRedView)))
-        redView.backgroundColor = .red
         view.addSubview(redView)
-        //redView.frame = CGRect(x: 0, y: 0, width: 100, height: 200)
+        
+        addChild(appFullscreenCV)
+        
+        
+        self.appFullScreenController = appFullscreenCV
         
         guard let cell = collectionView.cellForItem(at: indexPath) else { return }
         
@@ -61,6 +70,8 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         redView.frame = startFrame
         redView.layer.cornerRadius = 16
         
+        self.tabBarController?.tabBar.transform = CGAffineTransform(translationX: 0, y: 100)
+        
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: {
             redView.frame = self.view.frame
         }, completion: nil)
@@ -69,11 +80,15 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
     var startingFrame: CGRect?
     
     @objc func handleRemoveRedView(gesture: UITapGestureRecognizer) {
-        //gesture.view?.removeFromSuperview()
+  
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: {
             gesture.view?.frame = self.startingFrame ?? .zero
+            
+            self.tabBarController?.tabBar.transform = .identity
+            
         }, completion: { _ in
             gesture.view?.removeFromSuperview()
+            self.appFullScreenController?.removeFromParent()
         })
     }
 }
