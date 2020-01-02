@@ -12,7 +12,6 @@ class AppFullScreenDescCell: UITableViewCell {
     
     let descLabel: UILabel = {
         let lb = UILabel()
-        lb.text = "DESC"
        
         let attributedText = NSMutableAttributedString(string: "Great games", attributes: [.foregroundColor: UIColor.black])
         
