@@ -48,6 +48,8 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         
         self.appFullscreenController = appFullscreenController
         
+        self.collectionView.isUserInteractionEnabled = false
+        
         guard let cell = collectionView.cellForItem(at: indexPath) else { return }
         
         // absolute coordindates of cell
@@ -79,6 +81,11 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
             
             self.tabBarController?.tabBar.transform = CGAffineTransform(translationX: 0, y: 100)
             
+            guard let cell = self.appFullscreenController.tableView.cellForRow(at: [0,0]) as? AppFullscreenHeaderCell else { return }
+            
+            cell.todayCell.topConstraint?.constant = 48
+            cell.layoutIfNeeded()
+            
         }, completion: nil)
     }
     
@@ -99,9 +106,16 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
             
             self.tabBarController?.tabBar.transform = .identity
             
+            guard let cell = self.appFullscreenController.tableView.cellForRow(at: [0,0]) as? AppFullscreenHeaderCell else { return }
+            
+            cell.todayCell.topConstraint?.constant = 24
+            cell.layoutIfNeeded()
+            
         }, completion: { _ in
             self.appFullscreenController.view.removeFromSuperview()
             self.appFullscreenController.removeFromParent()
+            // 元件自動變成不能點選的模樣
+            self.collectionView.isUserInteractionEnabled = true
         })
     }
     
@@ -112,6 +126,7 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! TodayCell
         cell.todayItem = items[indexPath.item]
+        
         return cell
     }
     
