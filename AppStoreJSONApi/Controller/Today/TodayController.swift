@@ -10,21 +10,82 @@ import UIKit
 
 class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
     
-    fileprivate let cellId = "cellId"
+    //    fileprivate let cellId = "cellId"
+    //    fileprivate let muiltCellId = "muiltCellId"
     
-    let items = [
-        TodayItem.init(category: "LIFE HACK", title: "Utilizing your Time", image: #imageLiteral(resourceName: "garden"), description: "All the tools and apps you need to intelligently organize your life the right way.", backgroundColor: .white),
-        TodayItem.init(category: "HOLIDAYS", title: "Travel on a Budget", image: #imageLiteral(resourceName: "holiday"), description: "Find out all you need to know on how to travel without packing everything!", backgroundColor: #colorLiteral(red: 0.9838578105, green: 0.9588007331, blue: 0.7274674177, alpha: 1))
-    ]
+    //    let items = [
+    //
+    //        TodayItem.init(category: "LIFE HACK", title: "Utilizing your Time", image: #imageLiteral(resourceName: "garden"), description: "All the tools and apps you need to intelligently organize your life the right way.", backgroundColor: .white, cellType: .single),
+    //
+    //        TodayItem.init(category: "SECOND CELL", title: "Test-Drive These CarPlay Apps", image: #imageLiteral(resourceName: "garden"), description: "", backgroundColor: .white, cellType: .multiple),
+    //
+    //        TodayItem.init(category: "HOLIDAYS", title: "Travel on a Budget", image: #imageLiteral(resourceName: "holiday"), description: "Find out all you need to know on how to travel without packing everything!", backgroundColor: #colorLiteral(red: 0.9838578105, green: 0.9588007331, blue: 0.7274674177, alpha: 1), cellType: .single),
+    //
+    //        TodayItem.init(category: "SECOND CELL", title: "Test-Drive These CarPlay Apps", image: #imageLiteral(resourceName: "garden"), description: "", backgroundColor: .white, cellType: .multiple)
+    //    ]
+    
+    var items = [TodayItem]()
+    
+    
+    
+    let activityIndicatorView: UIActivityIndicatorView = {
+        let aiv = UIActivityIndicatorView(style: .whiteLarge)
+        aiv.color = .darkGray
+        aiv.startAnimating()
+        aiv.hidesWhenStopped = true //设置动画结束是否隐藏控件
+        
+        return aiv
+    }()
+    
+    fileprivate func fetchData() {
+        //DispatchGroup
+        let dispatchGroup = DispatchGroup()
+        
+        var topGrossingGroup: AppGroup?
+        
+        dispatchGroup.enter()
+        Service.shared.fetchTopGrossing { (appGroup, err) in
+            topGrossingGroup = appGroup
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        Service.shared.fetchGames { (appGroup, err) in
+            dispatchGroup.leave()
+        }
+        
+        //completion block
+        dispatchGroup.notify(queue: .main) {
+            // I'll have access to top grossing and games somehow
+            print("finsihed feching")
+            
+            self.activityIndicatorView.stopAnimating()
+            self.items = [
+                TodayItem.init(category: "Daily List", title: topGrossingGroup?.feed.title ?? "", image: #imageLiteral(resourceName: "garden"), description: "", backgroundColor: .white, cellType: .multiple, apps: topGrossingGroup?.feed.results ?? []),
+                TodayItem.init(category: "Daily List", title: topGrossingGroup?.feed.title ?? "", image: #imageLiteral(resourceName: "garden"), description: "", backgroundColor: .white, cellType: .multiple, apps: topGrossingGroup?.feed.results ?? []),
+                TodayItem.init(category: "Daily List", title: topGrossingGroup?.feed.title ?? "", image: #imageLiteral(resourceName: "garden"), description: "", backgroundColor: .white, cellType: .single, apps: topGrossingGroup?.feed.results ?? [])
+                
+            ]
+            
+            self.collectionView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.centerInSuperview()
+        
+        fetchData()
         
         navigationController?.isNavigationBarHidden = true
         
         collectionView.backgroundColor = #colorLiteral(red: 0.948936522, green: 0.9490727782, blue: 0.9489068389, alpha: 1)
         
-        collectionView.register(TodayCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(TodayCell.self, forCellWithReuseIdentifier: TodayItem.CellType.single.rawValue)
+        
+        collectionView.register(TodayMultipleAppCell.self, forCellWithReuseIdentifier: TodayItem.CellType.multiple.rawValue)
     }
     
     var appFullscreenController: AppFullscreenController!
@@ -124,14 +185,39 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! TodayCell
+        
+        let cellId = items[indexPath.item].cellType.rawValue
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BaseTodayCell
+        
         cell.todayItem = items[indexPath.item]
         
+        //        if let cell = cell as? TodayCell {
+        //            cell.todayItem = items[indexPath.item]
+        //        } else if let cell = cell as? TodayMultipleAppCell {
+        //            cell.todayItem = items[indexPath.item]
+        //        }
+        
         return cell
+        
+        //
+        //        if indexPath.item == 0 {
+        //            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: muiltCellId, for: indexPath) as! TodayMultipleAppCell
+        //            cell.todayItem = items[indexPath.item]
+        //            return cell
+        //        }
+        //
+        //        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! TodayCell
+        //
+        //        cell.todayItem = items[indexPath.item]
+        //
+        //        return cell
     }
     
+    static let cellSize: CGFloat = 500
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return .init(width: view.frame.width - 64, height: 450)
+        return .init(width: view.frame.width - 64, height: TodayController.cellSize)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

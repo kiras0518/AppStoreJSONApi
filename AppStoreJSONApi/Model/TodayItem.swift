@@ -14,4 +14,12 @@ struct TodayItem {
     let image: UIImage
     let description: String
     let backgroundColor: UIColor
+    
+    let cellType: CellType
+    
+    var apps:[FeedResult]
+    
+    enum CellType: String {
+        case single, multiple
+    }
 }

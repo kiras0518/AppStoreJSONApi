@@ -8,16 +8,16 @@
 
 import UIKit
 
-class TodayCell: UICollectionViewCell {
+class TodayCell: BaseTodayCell {
     
-    var todayItem: TodayItem! {
+    override var todayItem: TodayItem? {
         didSet {
-            categoryLabel.text = todayItem.category
-            titleLabel.text = todayItem.title
-            imageView.image = todayItem.image
-            descriptionLabel.text = todayItem.description
+            categoryLabel.text = todayItem?.category
+            titleLabel.text = todayItem?.title
+            imageView.image = todayItem?.image
+            descriptionLabel.text = todayItem?.description
             
-            backgroundColor = todayItem.backgroundColor
+            backgroundColor = todayItem?.backgroundColor
         }
     }
     
