@@ -35,6 +35,8 @@ class AppFullscreenController: UITableViewController {
             headerCell.closeButton.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
             headerCell.todayCell.todayItem = todayItem
             headerCell.todayCell.layer.cornerRadius = 0
+            headerCell.clipsToBounds = true
+            
             return headerCell
         }
         
@@ -51,19 +53,10 @@ class AppFullscreenController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         if indexPath.row == 0 {
-           return 500
+           return TodayController.cellSize
         }
         
         return super.tableView(tableView, heightForRowAt: indexPath)
     }
-    
-//    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let header = TodayCell()
-//        return header
-//    }
-//
-//    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return 450
-//    }
     
 }
