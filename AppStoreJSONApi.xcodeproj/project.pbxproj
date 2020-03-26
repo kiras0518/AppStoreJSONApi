@@ -298,16 +298,16 @@
 		6E74D286238A67B3009D79BE /* AppStoreJSONApi */ = {
 			isa = PBXGroup;
 			children = (
-				6E74D287238A67B3009D79BE /* AppDelegate.swift */,
-				6E74D289238A67B3009D79BE /* ViewController.swift */,
 				6E469D74238D8E3B00EEAD8F /* Model */,
 				6E469D73238D889C00EEAD8F /* Controller */,
 				6E469D72238D888600EEAD8F /* View */,
-				6E74D28B238A67B3009D79BE /* Main.storyboard */,
 				6E44915E23996F27002B8AF0 /* Helpers */,
 				6E0E2A38238EDE2500CDBF74 /* Service */,
+				6E74D287238A67B3009D79BE /* AppDelegate.swift */,
 				6E74D28E238A67B4009D79BE /* Assets.xcassets */,
+				6E74D289238A67B3009D79BE /* ViewController.swift */,
 				6E74D290238A67B4009D79BE /* LaunchScreen.storyboard */,
+				6E74D28B238A67B3009D79BE /* Main.storyboard */,
 				6E74D293238A67B4009D79BE /* Info.plist */,
 			);
 			path = AppStoreJSONApi;
