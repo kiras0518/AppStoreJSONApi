@@ -29,13 +29,13 @@ class MusicController: BaseListController {
     fileprivate func fetchData() {
         
         Service.shared.fetchMusic(searchTerm: searchTerm) { (res, err) in
+            
             self.results = res?.results ?? []
+            
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
         }
-        
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
-        
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -66,8 +66,6 @@ class MusicController: BaseListController {
         cell.nameLabel.text = track.trackName
         cell.imageView.sd_setImage(with: URL(string: track.artworkUrl100))
         cell.subLabel.text = "\(track.trackName ?? "" ) * \(track.collectionName ?? "")"
-        
-        print("indexPath.row", indexPath.row)
         
         if indexPath.row == results.count - 1 {
             print("fetch more data")
