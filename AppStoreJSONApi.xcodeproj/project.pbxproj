@@ -52,6 +52,7 @@
 		6EC71C6423E03647006CE5FF /* BackEnabledNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC71C6323E03647006CE5FF /* BackEnabledNavigationController.swift */; };
 		6ECB662E23CAF4D1006C45FB /* TodayMultipleAppCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECB662D23CAF4D1006C45FB /* TodayMultipleAppCell.swift */; };
 		6ECB663023CB0F08006C45FB /* BaseTodayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECB662F23CB0F08006C45FB /* BaseTodayCell.swift */; };
+		6ECF62452430F65000B49E4D /* AppsCompositionalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECF62442430F65000B49E4D /* AppsCompositionalView.swift */; };
 		6ED792C123BCF6D500AE16A3 /* AppFullscreenHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED792C023BCF6D500AE16A3 /* AppFullscreenHeaderCell.swift */; };
 		6EF3901223AF6BE000F14B7E /* TodayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF3901123AF6BE000F14B7E /* TodayController.swift */; };
 		6EF3901423AF6CAE00F14B7E /* TodayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF3901323AF6CAE00F14B7E /* TodayCell.swift */; };
@@ -132,6 +133,7 @@
 		6EC71C6323E03647006CE5FF /* BackEnabledNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackEnabledNavigationController.swift; sourceTree = "<group>"; };
 		6ECB662D23CAF4D1006C45FB /* TodayMultipleAppCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayMultipleAppCell.swift; sourceTree = "<group>"; };
 		6ECB662F23CB0F08006C45FB /* BaseTodayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTodayCell.swift; sourceTree = "<group>"; };
+		6ECF62442430F65000B49E4D /* AppsCompositionalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppsCompositionalView.swift; sourceTree = "<group>"; };
 		6ED792C023BCF6D500AE16A3 /* AppFullscreenHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFullscreenHeaderCell.swift; sourceTree = "<group>"; };
 		6EF3901123AF6BE000F14B7E /* TodayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayController.swift; sourceTree = "<group>"; };
 		6EF3901323AF6CAE00F14B7E /* TodayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayCell.swift; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				6E63DABD2392B7B600671060 /* BaseListController.swift */,
 				6E74D2B5238A6804009D79BE /* BaseTabBarController.swift */,
 				6E44915F23996F8D002B8AF0 /* HorizontalSnappingController.swift */,
+				6ECF62442430F65000B49E4D /* AppsCompositionalView.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -646,6 +649,7 @@
 				6E74D28A238A67B3009D79BE /* ViewController.swift in Sources */,
 				6E9366562396C2E10021E153 /* SocialApp.swift in Sources */,
 				6EAA4F1023BA5BC600406D1C /* AppFullScreenDescCell.swift in Sources */,
+				6ECF62452430F65000B49E4D /* AppsCompositionalView.swift in Sources */,
 				6E44915D23996DF5002B8AF0 /* BetterSnappingLayout.swift in Sources */,
 				6EB01A7E242E008D00ABB2B9 /* MusicLoadingFooter.swift in Sources */,
 				6EAA4F0D23BA56FF00406D1C /* AppFullscreenController.swift in Sources */,
@@ -864,6 +868,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8G52W4UACZ;
 				INFOPLIST_FILE = AppStoreJSONApi/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -883,6 +888,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8G52W4UACZ;
 				INFOPLIST_FILE = AppStoreJSONApi/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

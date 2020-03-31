@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MusicController: BaseListController, UICollectionViewDelegateFlowLayout {
+class MusicController: BaseListController {
     
     fileprivate let cellId = "cellId"
     fileprivate let footerId = "footerId"
@@ -27,22 +27,15 @@ class MusicController: BaseListController, UICollectionViewDelegateFlowLayout {
     var searchTerm = "taylor"
     
     fileprivate func fetchData() {
-        let urlString = "https://itunes.apple.com/search?term=\(searchTerm)&offset=0&limit=20"
         
-        Service.shared.fetchGenericJSONData(urlString: urlString) { (searchResult: SearchResult?, err) in
-            
-            if let error = err {
-                print("Failed to paginate data:", error)
-                return
-            }
-            
-            self.results = searchResult?.results ?? []
-            
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-            
+        Service.shared.fetchMusic(searchTerm: searchTerm) { (res, err) in
+            self.results = res?.results ?? []
         }
+        
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+        
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -74,31 +67,27 @@ class MusicController: BaseListController, UICollectionViewDelegateFlowLayout {
         cell.imageView.sd_setImage(with: URL(string: track.artworkUrl100))
         cell.subLabel.text = "\(track.trackName ?? "" ) * \(track.collectionName ?? "")"
         
+        print("indexPath.row", indexPath.row)
+        
         if indexPath.row == results.count - 1 {
             print("fetch more data")
             
             isPagination = true
             
-            let urlString = "https://itunes.apple.com/search?term=\(results.count)&offset=0&limit=20"
-            
-            Service.shared.fetchGenericJSONData(urlString: urlString) { (searchResult: SearchResult?, err) in
+            Service.shared.fetchMusicCount(counts: 10) { (res, err) in
                 
-                if let error = err {
-                    print("Failed to paginate data:", error)
-                    return
-                }
-                
-                if searchResult?.results.count == 0 {
+                if res?.results.count == 0 {
                     self.isDonePagination = true
                 }
                 
                 sleep(2)
                 
-                self.results += searchResult?.results ?? []
+                self.results += res?.results ?? []
                 
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                 }
+                
                 self.isPagination = false
             }
             
@@ -107,7 +96,9 @@ class MusicController: BaseListController, UICollectionViewDelegateFlowLayout {
         return cell
         
     }
-    
+}
+
+extension MusicController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return .init(width: view.frame.width, height: 100)
     }

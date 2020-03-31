@@ -12,6 +12,18 @@ class Service {
     
     static let shared = Service()
     
+    func fetchMusic(searchTerm: String, completion: @escaping (SearchResult?, Error?) -> ()) {
+        let urlString = "https://itunes.apple.com/search?term=\(searchTerm)&offset=0&limit=20"
+        
+        fetchGenericJSONData(urlString: urlString, completion: completion)
+    }
+    
+    func fetchMusicCount(counts: Int, completion: @escaping (SearchResult?, Error?) -> ()) {
+        let urlString = "https://itunes.apple.com/search?term=\(counts)&offset=0&limit=10"
+        
+        fetchGenericJSONData(urlString: urlString, completion: completion)
+    }
+    
     func fetchApps(searchTerm: String, completion: @escaping (SearchResult?, Error?) -> ()) {
         
         let urlString = "https://itunes.apple.com/search?term=\(searchTerm)&entity=software"
