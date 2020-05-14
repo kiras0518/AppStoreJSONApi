@@ -376,18 +376,18 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout, U
         var topGrossingGroup: AppGroup?
         var gamesGroup: AppGroup?
         
-        dispatchGroup.enter()
-        Service.shared.fetchTopGrossing { (appGroup, err) in
-            // make sure to check your errors
-            topGrossingGroup = appGroup
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.enter()
-        Service.shared.fetchGames { (appGroup, err) in
-            gamesGroup = appGroup
-            dispatchGroup.leave()
-        }
+//        dispatchGroup.enter()
+//        TopGamesService.shared.fetchTopGrossing { (appGroup, err) in
+//            // make sure to check your errors
+//            topGrossingGroup = appGroup
+//            dispatchGroup.leave()
+//        }
+//        
+//        dispatchGroup.enter()
+//        TopGamesService.shared.fetchGames { (appGroup, err) in
+//            gamesGroup = appGroup
+//            dispatchGroup.leave()
+//        }
         
         // completion block
         dispatchGroup.notify(queue: .main) {

@@ -50,40 +50,32 @@ class AppsController: BaseListController, UICollectionViewDelegateFlowLayout {
         
         let dispatchGroup = DispatchGroup()
         
-        dispatchGroup.enter()
-        Service.shared.fetchGames { (data, error) in
-            print("Done with Game")
-            dispatchGroup.leave()
-            group1 = data
-        }
-        
-        dispatchGroup.enter()
-        Service.shared.fetchTopGrossing(completion: { (appGroup, err) in
-            print("Done with Gorssing")
-            dispatchGroup.leave()
-            group2 = appGroup
-        })
-        
-        dispatchGroup.enter()
-        Service.shared.fetchAppGroup(urlString: "https://rss.itunes.apple.com/api/v1/us/ios-apps/top-free/all/25/explicit.json") { (appGroup, err) in
-            print("Done with Free")
-            dispatchGroup.leave()
-            group3 = appGroup
-//            if let group = appGroup {
-//                self.groups.append(group)
-//            }
-//            DispatchQueue.main.async {
-//                self.collectionView.reloadData()
-//            }
-        }
-         dispatchGroup.enter()
-        Service.shared.fetchSocialApps { (apps, err) in
-            print("Done with Social")
-            dispatchGroup.leave()
-            self.socialApps = apps ?? []
-            
-            
-        }
+//        dispatchGroup.enter()
+//        TopGamesService.shared.fetchGames { (data, error) in
+//            print("Done with Game")
+//            dispatchGroup.leave()
+//            group1 = data
+//        }
+//        
+//        dispatchGroup.enter()
+//        TopGamesService.shared.fetchTopGrossing(completion: { (appGroup, err) in
+//            print("Done with Gorssing")
+//            dispatchGroup.leave()
+//            group2 = appGroup
+//        })
+//        
+//        dispatchGroup.enter()
+//        TopGamesService.shared.fetchAppGroup(urlString: "https://rss.itunes.apple.com/api/v1/us/ios-apps/top-free/all/25/explicit.json") { (appGroup, err) in
+//            print("Done with Free")
+//            dispatchGroup.leave()
+//            group3 = appGroup
+//        }
+//         dispatchGroup.enter()
+//        SocialService.shared.fetchSocialApps { (apps, err) in
+//            print("Done with Social")
+//            dispatchGroup.leave()
+//            self.socialApps = apps ?? []
+//        }
         
         // completd
         dispatchGroup.notify(queue: .main) {

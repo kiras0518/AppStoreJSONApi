@@ -79,7 +79,7 @@ class AppDetailController: BaseListController, UICollectionViewDelegateFlowLayou
     
     fileprivate func fetchData() {
         let url = "https://itunes.apple.com/lookup?id=\(appId)"
-        Service.shared.fetchGenericJSONData(urlString: url) { (result: SearchResult?, err) in
+        RequestService.shared.fetchGenericJSONData(urlString: url) { (result: SearchResult?, err) in
             //print(result?.results.first?.releaseNotes)
             let app = result?.results.first
             self.app = app
@@ -89,7 +89,7 @@ class AppDetailController: BaseListController, UICollectionViewDelegateFlowLayou
         }
         
         let reviewsUrl = "https://itunes.apple.com/rss/customerreviews/page=1/id=\(appId)/sortby=mostrecent/json?l=en&cc=us"
-        Service.shared.fetchGenericJSONData(urlString: reviewsUrl) { (reviews: Reviews?, err) in
+        RequestService.shared.fetchGenericJSONData(urlString: reviewsUrl) { (reviews: Reviews?, err) in
             if let err = err {
                 print("Failed to decode revies:", err)
                 return

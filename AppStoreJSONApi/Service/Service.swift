@@ -8,29 +8,50 @@
 
 import Foundation
 
-class Service {
+protocol APIService {
+    var url: String { get }
+}
+
+struct ItunesServiceURL {
+    static var baseUrl: String { return "https://itunes.apple.com/search?term=" }
+}
+
+class MusicService {
+   
+    static let shared = MusicService()
     
-    static let shared = Service()
+    let baseURL = "https://itunes.apple.com/search?term="
     
     func fetchMusic(searchTerm: String, completion: @escaping (SearchResult?, Error?) -> ()) {
-        let urlString = "https://itunes.apple.com/search?term=\(searchTerm)&offset=0&limit=20"
         
-        fetchGenericJSONData(urlString: urlString, completion: completion)
+        let urlString = "\(baseURL)\(searchTerm)&offset=0&limit=20"
+        
+        RequestService.shared.fetchGenericJSONData(urlString: urlString, completion: completion)
     }
     
     func fetchMusicCount(counts: Int, completion: @escaping (SearchResult?, Error?) -> ()) {
-        let urlString = "https://itunes.apple.com/search?term=\(counts)&offset=0&limit=10"
         
-        fetchGenericJSONData(urlString: urlString, completion: completion)
+        let urlString = "\(baseURL)\(counts)&offset=0&limit=10"
+        
+        RequestService.shared.fetchGenericJSONData(urlString: urlString, completion: completion)
     }
+}
+
+class SocialService {
     
-    func fetchApps(searchTerm: String, completion: @escaping (SearchResult?, Error?) -> ()) {
+    static let shared = SocialService()
+    
+    func fetchSocialApps(completion: @escaping ([SocialApp]?, Error?) -> Void) {
         
-        let urlString = "https://itunes.apple.com/search?term=\(searchTerm)&entity=software"
+        let urlString = "https://api.letsbuildthatapp.com/appstore/social"
         
-        fetchGenericJSONData(urlString: urlString, completion: completion)
-        
+        RequestService.shared.fetchGenericJSONData(urlString: urlString, completion: completion)
     }
+}
+
+class TopGamesService {
+    
+    static let shared = TopGamesService()
     
     func fetchTopGrossing(completion: @escaping (AppGroup?, Error?) -> ()) {
         
@@ -49,14 +70,17 @@ class Service {
     
     //helper
     func fetchAppGroup(urlString: String, completion: @escaping (AppGroup?, Error?) -> Void) {
-        
-        fetchGenericJSONData(urlString: urlString, completion: completion)
-        
+        RequestService.shared.fetchGenericJSONData(urlString: urlString, completion: completion)
     }
+}
+
+class RequestService {
     
-    func fetchSocialApps(completion: @escaping ([SocialApp]?, Error?) -> Void) {
+    static let shared = RequestService()
+    
+    func fetchApps(searchTerm: String, completion: @escaping (SearchResult?, Error?) -> ()) {
         
-        let urlString = "https://api.letsbuildthatapp.com/appstore/social"
+        let urlString = "https://itunes.apple.com/search?term=\(searchTerm)&entity=software"
         
         fetchGenericJSONData(urlString: urlString, completion: completion)
         
@@ -78,33 +102,18 @@ class Service {
             }
             
             do {
+                
                 let object = try JSONDecoder().decode(T.self, from: data!)
                 
                 completion(object, nil)
+                
             } catch let jsonError {
+                
                 completion(nil, error)
+                
                 print("Failed to decode json:", jsonError)
             }
             
-            }.resume()
-        
+        }.resume()
     }
-    
 }
-
-//class Stack<T: Decodable> {
-//    var items = [T]()
-//    func push(item: T) { items.append(item) }
-//    func pop() -> T? { return items.last }
-//}
-//
-//func dummyFunc() {
-//
-//    let stackOfStrings = Stack<String>()
-//    stackOfStrings.push(item: "This is to ba string")
-//
-//    let stackOfInts = Stack<Int>()
-//    stackOfInts.push(item: 1)
-//
-//}
-//

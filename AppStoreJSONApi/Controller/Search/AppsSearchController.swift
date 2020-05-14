@@ -55,7 +55,7 @@ class AppsSearchController: UICollectionViewController, UICollectionViewDelegate
         timer?.invalidate()
         
         timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in
-            Service.shared.fetchApps(searchTerm: searchText) { (res, error) in
+            RequestService.shared.fetchApps(searchTerm: searchText) { (res, error) in
                 
                 if let err = error {
                     print("Failed to fetch apps:", err)
@@ -75,7 +75,7 @@ class AppsSearchController: UICollectionViewController, UICollectionViewDelegate
     
     fileprivate func fetchiTunesApps() {
         
-        Service.shared.fetchApps(searchTerm: "Twitter")  { (res, err)  in
+        RequestService.shared.fetchApps(searchTerm: "Twitter")  { (res, err)  in
             
             if let err = err {
                 print("Failed to Feach", err)

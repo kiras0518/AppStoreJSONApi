@@ -8,96 +8,71 @@
 
 import UIKit
 
+protocol ViewControllersFactory {
+    associatedtype ViewController
+    
+    static func makeInitateViewController() -> ViewController
+}
+
 class MusicController: BaseListController {
     
-    fileprivate let cellId = "cellId"
-    fileprivate let footerId = "footerId"
+//    var dataSource = MusicDataSource()
+//    var viewModel = MusicViewModel()
+    
+    var dataSource: MusicDataSource?
+    var viewModel: MusicViewModel?
+    
+    fileprivate func setupCollectionView() {
+        collectionView.backgroundColor = .white
+        collectionView.register(TrackCell.self, forCellWithReuseIdentifier: TrackCell.identifier)
+        collectionView.register(MusicLoadingFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: MusicLoadingFooter.identifier)
+        collectionView.delegate = self
+        collectionView.dataSource = dataSource
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.backgroundColor = .white
+        setupCollectionView()
         
-        collectionView.register(TrackCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView.register(MusicLoadingFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: footerId)
+        viewModel?.fetchMusic()
         
-        fetchData()
+//        viewModel?.addObserve(completion: { [weak self] (model) in
+//            guard let model = model else { return }
+//            self?.dataSource?.update(model)
+//            self?.dataSource?.reloadData()
+//        })
     }
     
-    var results = [Result]()
-    var searchTerm = "taylor"
-    
-    fileprivate func fetchData() {
-        
-        Service.shared.fetchMusic(searchTerm: searchTerm) { (res, err) in
-            
-            self.results = res?.results ?? []
-            
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
     }
     
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: footerId, for: indexPath)
-        
-        return footer
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        let height: CGFloat = isDonePagination ? 0 : 100
-        return .init(width: view.frame.width, height: height)
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return results.count
-    }
-    
-    var isPagination = false
-    var isDonePagination = false
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! TrackCell
-        
-        let track = results[indexPath.row]
-        
-        cell.nameLabel.text = track.trackName
-        cell.imageView.sd_setImage(with: URL(string: track.artworkUrl100))
-        cell.subLabel.text = "\(track.trackName ?? "" ) * \(track.collectionName ?? "")"
-        
-        if indexPath.row == results.count - 1 {
-            print("fetch more data")
-            
-            isPagination = true
-            
-            Service.shared.fetchMusicCount(counts: 10) { (res, err) in
-                
-                if res?.results.count == 0 {
-                    self.isDonePagination = true
-                }
-                
-                sleep(2)
-                
-                self.results += res?.results ?? []
-                
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
-                }
-                
-                self.isPagination = false
-            }
-            
-        }
-        
-        return cell
-        
+    deinit {
+        viewModel?.removeObserve()
     }
 }
 
+//extension MusicController: ViewControllersFactory {
+//
+//    typealias ViewController = MusicController
+//
+//    static func makeInitateViewController() -> MusicController {
+//        let vc = MusicController()
+//        vc.dataSource = MusicDataSource()
+//        vc.dataSource?.inject(vc.collectionView)
+//        vc.viewModel = MusicViewModel()
+//        return vc
+//    }
+//}
+
 extension MusicController: UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return .init(width: view.frame.width, height: 100)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        let height: CGFloat = dataSource?.isDonePagination ?? false ? 0 : 100
+        return .init(width: view.frame.width, height: height)
     }
 }
