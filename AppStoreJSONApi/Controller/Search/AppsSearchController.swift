@@ -9,7 +9,7 @@
 import UIKit
 import SDWebImage
 
-class AppsSearchController: UICollectionViewController, UISearchBarDelegate {
+class AppsSearchController: UICollectionViewController {
     
     let searchController = UISearchController(searchResultsController: nil)
     
@@ -28,44 +28,9 @@ class AppsSearchController: UICollectionViewController, UISearchBarDelegate {
         collectionView.delegate = self
     }
     
-    fileprivate func setupSerachBar() {
-        view.addSubview(enterSearchLabel)
-        enterSearchLabel.fillSuperview(padding: .init(top: 100, left: 50, bottom: 0, right: 50))
-        
-        definesPresentationContext = true
-        navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-        searchController.dimsBackgroundDuringPresentation = false
-        searchController.searchBar.delegate = self
-    }
-    
-    var timer: Timer?
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print(searchText)
-        
-        timer?.invalidate()
-        
-        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in
-            RequestService.shared.fetchApps(searchTerm: searchText) { (res, error) in
-                
-                if let err = error {
-                    print("Failed to fetch apps:", err)
-                    return
-                }
-                
-                self.dataSource.data = res?.results ?? []
-                
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
-                }
-            }
-        })
-        
-    }
-    
     var dataSource = SearchDataSource()
     var viewModel = SearchViewModel()
+    var timer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,6 +64,43 @@ class AppsSearchController: UICollectionViewController, UISearchBarDelegate {
 extension AppsSearchController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width, height: 350)
+    }
+}
+
+extension AppsSearchController: UISearchBarDelegate {
+    
+    fileprivate func setupSerachBar() {
+        view.addSubview(enterSearchLabel)
+        enterSearchLabel.fillSuperview(padding: .init(top: 100, left: 50, bottom: 0, right: 50))
+        
+        definesPresentationContext = true
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchBar.delegate = self
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print(searchText)
+        
+        timer?.invalidate()
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in
+            RequestService.shared.fetchApps(searchTerm: searchText) { (res, error) in
+                
+                if let err = error {
+                    print("Failed to fetch apps:", err)
+                    return
+                }
+                
+                self.dataSource.data = res?.results ?? []
+                
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+        })
+        
     }
 }
 
