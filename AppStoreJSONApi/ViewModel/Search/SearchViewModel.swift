@@ -1,5 +1,5 @@
 //
-//  MusicViewModel.swift
+//  SearchViewModel.swift
 //  AppStoreJSONApi
 //
 //  Created by kiras on 2020/5/14.
@@ -8,35 +8,29 @@
 
 import Foundation
 
-class MusicViewModel {
+class SearchViewModel {
     
-    private var completion: (([Result]?) -> Void)?
-    private let service: MusicService
-   
+    private var completion: (([Result]?)-> Void)?
+    private let service: RequestService
+    
     private var model: [Result]? {
         didSet {
             completion?(model)
         }
     }
     
-    init(service: MusicService = MusicService.shared) {
+    init(service: RequestService = RequestService.shared) {
         self.service = service
     }
     
-    func fetchMusic() {
-        service.fetchMusic(searchTerm: "taylor") { [weak self] (res, err) in
-            self?.model = res?.results
-        }
-    }
-    
-    func fetchMusicCount() {
-        service.fetchMusicCount(counts: 10) { [weak self] (res, err) in
+    func fetchApps() {
+        service.fetchApps(searchTerm: "Twitter") { [weak self] (res, err) in
             self?.model = res?.results
         }
     }
 }
 
-extension MusicViewModel: ViewModelable {
+extension SearchViewModel: ViewModelable {
     typealias Model = [Result]
     
     func addObserve(completion: @escaping ([Result]?) -> Void) {

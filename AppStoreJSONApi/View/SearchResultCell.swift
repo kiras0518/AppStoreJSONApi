@@ -10,28 +10,54 @@ import UIKit
 
 class SearchResultCell: UICollectionViewCell {
     
-    var appResult: Result? {
-        didSet {
-            guard let model = appResult else { return }
-            nameLable.text = model.trackName
-            categoryLable.text = model.primaryGenreName
-            ratingsLable.text = "Rating: \(model.averageUserRating ?? 0)"
-            
-            let url = URL(string: model.artworkUrl100)
-            appIconImageView.sd_setImage(with: url)
-            
-            screenshot1ImageView.sd_setImage(with: URL(string: model.screenshotUrls?[0] ?? ""))
-            
-            if model.screenshotUrls?.count ?? 0 > 1 {
-                screenshot2ImageView.sd_setImage(with: URL(string: model.screenshotUrls?[1] ?? ""))
-            }
-            
-            if model.screenshotUrls?.count ?? 0 > 2 {
-                screenshot3ImageView.sd_setImage(with: URL(string: model.screenshotUrls?[2] ?? ""))
-            }
-            
+    static let identifier = "SearchResultCell"
+    
+    override var reuseIdentifier: String? {
+        return SearchResultCell.identifier
+    }
+    
+    func configCell(model: Result) {
+       
+        nameLable.text = model.trackName
+        categoryLable.text = model.primaryGenreName
+        ratingsLable.text = "Rating: \(model.averageUserRating ?? 0)"
+        
+        let url = URL(string: model.artworkUrl100)
+        appIconImageView.sd_setImage(with: url)
+        
+        screenshot1ImageView.sd_setImage(with: URL(string: model.screenshotUrls?[0] ?? ""))
+        
+        if model.screenshotUrls?.count ?? 0 > 1 {
+            screenshot2ImageView.sd_setImage(with: URL(string: model.screenshotUrls?[1] ?? ""))
+        }
+        
+        if model.screenshotUrls?.count ?? 0 > 2 {
+            screenshot3ImageView.sd_setImage(with: URL(string: model.screenshotUrls?[2] ?? ""))
         }
     }
+    
+//    var appResult: Result? {
+//        didSet {
+//            guard let model = appResult else { return }
+//            nameLable.text = model.trackName
+//            categoryLable.text = model.primaryGenreName
+//            ratingsLable.text = "Rating: \(model.averageUserRating ?? 0)"
+//
+//            let url = URL(string: model.artworkUrl100)
+//            appIconImageView.sd_setImage(with: url)
+//
+//            screenshot1ImageView.sd_setImage(with: URL(string: model.screenshotUrls?[0] ?? ""))
+//
+//            if model.screenshotUrls?.count ?? 0 > 1 {
+//                screenshot2ImageView.sd_setImage(with: URL(string: model.screenshotUrls?[1] ?? ""))
+//            }
+//
+//            if model.screenshotUrls?.count ?? 0 > 2 {
+//                screenshot3ImageView.sd_setImage(with: URL(string: model.screenshotUrls?[2] ?? ""))
+//            }
+//
+//        }
+//    }
     
     lazy var appIconImageView: UIImageView = {
         let iv = UIImageView()
@@ -104,7 +130,7 @@ class SearchResultCell: UICollectionViewCell {
         
         addSubview(overallStackView)
         overallStackView.fillSuperview(padding: .init(top: 16, left: 16, bottom: 16, right: 16))
-
+        
     }
     
     required init?(coder aDecoder: NSCoder) {

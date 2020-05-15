@@ -8,20 +8,12 @@
 
 import UIKit
 
-protocol ViewControllersFactory {
-    associatedtype ViewController
-    
-    static func makeInitateViewController() -> ViewController
-}
 
 class MusicController: BaseListController {
     
-//    var dataSource = MusicDataSource()
-//    var viewModel = MusicViewModel()
-    
-    var dataSource: MusicDataSource?
-    var viewModel: MusicViewModel?
-    
+    var dataSource = MusicDataSource()
+    var viewModel = MusicViewModel()
+
     fileprivate func setupCollectionView() {
         collectionView.backgroundColor = .white
         collectionView.register(TrackCell.self, forCellWithReuseIdentifier: TrackCell.identifier)
@@ -32,23 +24,20 @@ class MusicController: BaseListController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupCollectionView()
         
-        viewModel?.fetchMusic()
+        viewModel.fetchMusic()
         
-//        viewModel?.addObserve(completion: { [weak self] (model) in
-//            guard let model = model else { return }
-//            self?.dataSource?.update(model)
-//            self?.dataSource?.reloadData()
-//        })
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
+        viewModel.addObserve(completion: { [weak self] (model) in
+            guard let model = model else { return }
+            self?.dataSource.update(model)
+            self?.dataSource.reloadData()
+        })
     }
     
     deinit {
-        viewModel?.removeObserve()
+        viewModel.removeObserve()
     }
 }
 
@@ -72,7 +61,7 @@ extension MusicController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        let height: CGFloat = dataSource?.isDonePagination ?? false ? 0 : 100
+        let height: CGFloat = dataSource.isDonePagination ? 0 : 100
         return .init(width: view.frame.width, height: height)
     }
 }

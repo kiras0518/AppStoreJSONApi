@@ -9,44 +9,36 @@
 import UIKit
 import SDWebImage
 
-class AppsSearchController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
+class AppsSearchController: UICollectionViewController, UISearchBarDelegate {
     
-    fileprivate let cellId = "id1234"
+    let searchController = UISearchController(searchResultsController: nil)
     
-    fileprivate let searchController = UISearchController(searchResultsController: nil)
-    
-    fileprivate let enterSearchLabel: UILabel = {
-       let lb = UILabel()
+    let enterSearchLabel: UILabel = {
+        let lb = UILabel()
         lb.text = " Please enter serach trem"
         lb.textAlignment = .center
         lb.font = UIFont.boldSystemFont(ofSize: 20)
         return lb
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    fileprivate func setupCollectionView() {
         collectionView.backgroundColor = .white
-        
-        collectionView.register(SearchResultCell.self, forCellWithReuseIdentifier: cellId)
-        
-        view.addSubview(enterSearchLabel)
-        enterSearchLabel.fillSuperview(padding: .init(top: 100, left: 50, bottom: 0, right: 50))
-        
-        setupSerachBar()
-        
-        fetchiTunesApps()
-        
+        collectionView.register(SearchResultCell.self, forCellWithReuseIdentifier: SearchResultCell.identifier)
+        collectionView.dataSource = self
+        collectionView.delegate = self
     }
     
     fileprivate func setupSerachBar() {
+        view.addSubview(enterSearchLabel)
+        enterSearchLabel.fillSuperview(padding: .init(top: 100, left: 50, bottom: 0, right: 50))
+        
         definesPresentationContext = true
-        navigationItem.searchController = self.searchController
+        navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.delegate = self
-        
     }
+    
     var timer: Timer?
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -62,7 +54,8 @@ class AppsSearchController: UICollectionViewController, UICollectionViewDelegate
                     return
                 }
                 
-                self.appRusults = res?.results ?? []
+                self.dataSource.data = res?.results ?? []
+                
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                 }
@@ -71,48 +64,22 @@ class AppsSearchController: UICollectionViewController, UICollectionViewDelegate
         
     }
     
-    fileprivate var appRusults = [Result]()
+    var dataSource = SearchDataSource()
+    var viewModel = SearchViewModel()
     
-    fileprivate func fetchiTunesApps() {
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        RequestService.shared.fetchApps(searchTerm: "Twitter")  { (res, err)  in
-            
-            if let err = err {
-                print("Failed to Feach", err)
-                return
-            }
-            
-            self.appRusults = res?.results ?? []
-            
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        }
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let appId = String(appRusults[indexPath.row].trackId)
+        setupSerachBar()
+        setupCollectionView()
         
-        let appDetailCV = AppDetailController(appId: appId)
+        viewModel.fetchApps()
         
-        navigationController?.pushViewController(appDetailCV, animated: true)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 350)
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        enterSearchLabel.isHidden = appRusults.count != 0
-        return appRusults.count
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! SearchResultCell
-        
-        cell.appResult = appRusults[indexPath.row]
-        
-        return cell
+        viewModel.addObserve(completion: { [weak self] (model) in
+            guard let model = model else { return }
+            self?.dataSource.update(model)
+            self?.dataSource.reloadData()
+        })
     }
     
     init() {
@@ -123,4 +90,47 @@ class AppsSearchController: UICollectionViewController, UICollectionViewDelegate
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        viewModel.removeObserve()
+    }
+    
+}
+
+extension AppsSearchController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.width, height: 350)
+    }
+}
+
+extension AppsSearchController {
+    
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        enterSearchLabel.isHidden = dataSource.data.count != 0
+        return dataSource.data.count
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultCell.identifier, for: indexPath) as? SearchResultCell else { fatalError("Cannot dequeue reusable cell") }
+        
+        let model = dataSource.data[indexPath.row]
+        
+        cell.configCell(model: model)
+        
+        return cell
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let appId = String(dataSource.data[indexPath.row].trackId)
+        
+        let appDetailCV = AppDetailController(appId: appId)
+        
+        navigationController?.pushViewController(appDetailCV, animated: true)
+    }
 }

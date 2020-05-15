@@ -55,6 +55,10 @@
 		6ECB663023CB0F08006C45FB /* BaseTodayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECB662F23CB0F08006C45FB /* BaseTodayCell.swift */; };
 		6ECF62452430F65000B49E4D /* AppsCompositionalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ECF62442430F65000B49E4D /* AppsCompositionalView.swift */; };
 		6ED792C123BCF6D500AE16A3 /* AppFullscreenHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED792C023BCF6D500AE16A3 /* AppFullscreenHeaderCell.swift */; };
+		6EEF4A26246D8677007929C0 /* ViewControllersFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EEF4A25246D8677007929C0 /* ViewControllersFactory.swift */; };
+		6EEF4A28246D86EF007929C0 /* ViewModelable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EEF4A27246D86EF007929C0 /* ViewModelable.swift */; };
+		6EEF4A2B246D89F8007929C0 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EEF4A2A246D89F8007929C0 /* SearchViewModel.swift */; };
+		6EEF4A2D246D8A0A007929C0 /* SearchDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EEF4A2C246D8A0A007929C0 /* SearchDataSource.swift */; };
 		6EF3901223AF6BE000F14B7E /* TodayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF3901123AF6BE000F14B7E /* TodayController.swift */; };
 		6EF3901423AF6CAE00F14B7E /* TodayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF3901323AF6CAE00F14B7E /* TodayCell.swift */; };
 		6EFD393523A296EC0061A879 /* Reviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EFD393423A296EC0061A879 /* Reviews.swift */; };
@@ -139,6 +143,10 @@
 		6ECB662F23CB0F08006C45FB /* BaseTodayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTodayCell.swift; sourceTree = "<group>"; };
 		6ECF62442430F65000B49E4D /* AppsCompositionalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppsCompositionalView.swift; sourceTree = "<group>"; };
 		6ED792C023BCF6D500AE16A3 /* AppFullscreenHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFullscreenHeaderCell.swift; sourceTree = "<group>"; };
+		6EEF4A25246D8677007929C0 /* ViewControllersFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllersFactory.swift; sourceTree = "<group>"; };
+		6EEF4A27246D86EF007929C0 /* ViewModelable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelable.swift; sourceTree = "<group>"; };
+		6EEF4A2A246D89F8007929C0 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		6EEF4A2C246D8A0A007929C0 /* SearchDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDataSource.swift; sourceTree = "<group>"; };
 		6EF3901123AF6BE000F14B7E /* TodayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayController.swift; sourceTree = "<group>"; };
 		6EF3901323AF6CAE00F14B7E /* TodayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayCell.swift; sourceTree = "<group>"; };
 		6EFD393423A296EC0061A879 /* Reviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reviews.swift; sourceTree = "<group>"; };
@@ -193,6 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				6E3D27CE246BEBF400B838A3 /* SocialViewModel.swift */,
+				6EEF4A29246D89E4007929C0 /* Search */,
 				6EFD5C8D246D3DEB00D89C5C /* Music */,
 			);
 			path = ViewModel;
@@ -204,6 +213,8 @@
 				6E63DAC82392D3CA00671060 /* Extensions .swift */,
 				6E0E2A36238EDBBB00CDBF74 /* UIView+Layout.swift */,
 				6E44915C23996DF5002B8AF0 /* BetterSnappingLayout.swift */,
+				6EEF4A25246D8677007929C0 /* ViewControllersFactory.swift */,
+				6EEF4A27246D86EF007929C0 /* ViewModelable.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -386,6 +397,15 @@
 				6EB01A79242DF9EB00ABB2B9 /* MusicController.swift */,
 			);
 			path = Music;
+			sourceTree = "<group>";
+		};
+		6EEF4A29246D89E4007929C0 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				6EEF4A2A246D89F8007929C0 /* SearchViewModel.swift */,
+				6EEF4A2C246D8A0A007929C0 /* SearchDataSource.swift */,
+			);
+			path = Search;
 			sourceTree = "<group>";
 		};
 		6EF3901023AF6BC700F14B7E /* Today */ = {
@@ -680,9 +700,11 @@
 				6EAA4F0D23BA56FF00406D1C /* AppFullscreenController.swift in Sources */,
 				6E386C5723A1429A00E8EBEE /* ReviewCell.swift in Sources */,
 				6E386C5B23A1484200E8EBEE /* ReviewRowCell.swift in Sources */,
+				6EEF4A2D246D8A0A007929C0 /* SearchDataSource.swift in Sources */,
 				6E74D288238A67B3009D79BE /* AppDelegate.swift in Sources */,
 				6E58CD83239426BC0013D470 /* AppGroup.swift in Sources */,
 				6EFD5C8C246D3DE400D89C5C /* MusicDataSource.swift in Sources */,
+				6EEF4A26246D8677007929C0 /* ViewControllersFactory.swift in Sources */,
 				6E63DABC2392B6CE00671060 /* AppsController.swift in Sources */,
 				6EB01A7A242DF9EB00ABB2B9 /* MusicController.swift in Sources */,
 				6E58CD8123941ED70013D470 /* AppsHeaderCell.swift in Sources */,
@@ -701,6 +723,7 @@
 				6E58CD7D239417140013D470 /* AppsPageHeader.swift in Sources */,
 				6E0430F9239FEF2300594B10 /* PreviewShotsController.swift in Sources */,
 				6E0430F7239FECD700594B10 /* PreviewCell.swift in Sources */,
+				6EEF4A28246D86EF007929C0 /* ViewModelable.swift in Sources */,
 				6E386C5923A1460200E8EBEE /* ReviewsController.swift in Sources */,
 				6EC71C6423E03647006CE5FF /* BackEnabledNavigationController.swift in Sources */,
 				6EFD393523A296EC0061A879 /* Reviews.swift in Sources */,
@@ -716,6 +739,7 @@
 				6E74D2BE238AD5C8009D79BE /* VerticalStackView.swift in Sources */,
 				6E63DAC22392C09A00671060 /* AppshorizontalController.swift in Sources */,
 				6EB01A7C242DFA1F00ABB2B9 /* TrackCell.swift in Sources */,
+				6EEF4A2B246D89F8007929C0 /* SearchViewModel.swift in Sources */,
 				6E58CD7F239419DD0013D470 /* AppsHeaderHorizontalController.swift in Sources */,
 				6ECB662E23CAF4D1006C45FB /* TodayMultipleAppCell.swift in Sources */,
 			);
